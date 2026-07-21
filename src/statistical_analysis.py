@@ -435,6 +435,7 @@ def create_report(
 
 ## 분석 결과 요약
 
+- y=0은 연 소득 50,000달러 이하, y=1은 연 소득 50,000달러 초과를 의미한다.
 - y=0은 {y0_count:,}명({y0_ratio:.1f}%), y=1은 {y1_count:,}명({y1_ratio:.1f}%)으로 y=0이 더 많았다.
 - 유의한 수치형 변수: {join_variable_names(significance['significant_numeric'])}
 - 유의하지 않은 수치형 변수: {join_variable_names(significance['non_significant_numeric'])}
