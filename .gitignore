@@ -242,4 +242,3 @@ output/*
 
 # 모델 아티팩트
 *.pkl
-*.joblib
