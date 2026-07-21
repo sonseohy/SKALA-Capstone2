@@ -225,4 +225,21 @@ __marimo__/
 
 .agents/
 
-/data/
+# --- 프로젝트 커스텀 (Day2 종합 실습) ---
+
+# 환경변수 (.env는 위에서 이미 처리됨)
+.env.local
+
+# 원본/가공 데이터 (용량이 크거나 재생성 가능하므로 커밋하지 않음, scripts/download_data.sh로 재현)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# 산출물
+output/*
+!output/.gitkeep
+
+# 모델 아티팩트
+*.pkl
+*.joblib
