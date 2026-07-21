@@ -239,6 +239,7 @@ data/processed/*
 # 산출물
 output/*
 !output/.gitkeep
+!output/adult_income_model.joblib
 
 # 모델 아티팩트
 *.pkl
