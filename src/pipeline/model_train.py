@@ -65,7 +65,6 @@ def split_train_test(
 
 
 def build_model_pipeline(X_train: pd.DataFrame) -> Pipeline:
-    def build_model_pipeline(X_train):
     preprocessor = build_preprocessor(X_train)
 
     model = LogisticRegression(
