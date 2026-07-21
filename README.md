@@ -24,18 +24,33 @@ jupyter nbconvert --to notebook --execute --inplace notebooks/01_eda.ipynb
 ```
 .
 ├── data/
-│   ├── raw/            # 원본 데이터 (git 미포함, download_data.sh로 재현)
-│   └── processed/      # 전처리 완료 데이터
-├── notebooks/          # EDA·실험용 Jupyter 노트북
-├── src/                # 재사용 가능한 Python 모듈
-│   └── data_loader.py  # Pandas/Polars 로딩 + 클린 + 기본 EDA
+│   ├── raw/                              # 다운로드한 Adult 원본 데이터
+│   └── processed/                        # 결측치·중복 처리 후 데이터
+├── notebooks/
+│   ├── 01_eda.ipynb                     # 데이터 탐색과 기본 전처리
+│   ├── 02_visualization.ipynb           # Seaborn 기반 정적 시각화
+│   └── 03_visualization_interactive.ipynb # Plotly 기반 인터랙티브 시각화
+├── src/
+│   ├── data_loader.py                   # 데이터 로딩·정제와 기본 EDA
+│   ├── visualize.py                     # 정적·인터랙티브 차트 함수
+│   ├── statistical_analysis.py          # 기술통계와 가설검정
+│   └── pipeline/
+│       ├── model_preprocess.py          # 학습 전 전처리 파이프라인
+│       └── model_train.py               # 모델 학습·평가와 저장
 ├── scripts/
-│   └── download_data.sh
-├── tests/               # pytest
-├── output/               # 리포트/차트 산출물
-├── requirements.txt
-├── pyproject.toml       # ruff / pytest 설정
-└── .venv/               # 가상환경 (git 미포함)
+│   └── download_data.sh                 # UCI 데이터 다운로드
+├── tests/
+│   ├── test_data_loader.py              # 데이터 처리 테스트
+│   └── test_model_train.py              # 모델 파이프라인 테스트
+├── output/
+│   └── adult_income_pipeline.joblib     # 학습이 끝난 모델 파이프라인
+├── ADULT_CODEBOOK.md                    # 데이터 변수 설명
+├── statistical_analysis_report.md       # 통계 분석 결과
+├── requirements.txt                     # 실행에 필요한 라이브러리
+├── pyproject.toml                       # Ruff·pytest 설정
+├── .gitignore                           # Git 제외 파일 설정
+├── .vscode/settings.json                # VS Code 프로젝트 설정
+└── .claude/settings.json                # 프로젝트 도구 권한 설정
 ```
 
 ## 환경 설정
