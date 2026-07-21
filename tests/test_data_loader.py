@@ -21,6 +21,12 @@ def test_clean_pandas_removes_duplicates():
     assert len(cleaned) <= len(df)
 
 
+def test_clean_pandas_removes_missing_values():
+    df = load_pandas()
+    cleaned = clean_pandas(df)
+    assert cleaned.isna().sum().sum() == 0
+
+
 def test_pandas_polars_row_count_match():
     pdf = load_pandas()
     pldf = load_polars()
