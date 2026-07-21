@@ -1,6 +1,6 @@
 import pandas as pd
 
-from pipeline.model_train import (
+from src.pipeline.model_train import (
     build_model_pipeline,
     save_model,
     split_train_test,

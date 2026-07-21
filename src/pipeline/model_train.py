@@ -12,6 +12,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
+from src.pipeline.model_preprocess import build_preprocessor
+
 TARGET_COLUMN = "income"
 TARGET_MAPPING = {
     "<=50K": 0,
@@ -63,45 +65,18 @@ def split_train_test(
 
 
 def build_model_pipeline(X_train: pd.DataFrame) -> Pipeline:
-    """컬럼 타입에 맞는 변환기와 로지스틱 회귀 모델을 구성한다.
+    def build_model_pipeline(X_train):
+    preprocessor = build_preprocessor(X_train)
 
-    변환기는 학습 데이터에만 fit되므로 테스트 데이터 정보가 학습 과정에
-    섞이는 것을 방지한다.
-    """
-    numeric_columns = X_train.select_dtypes(include="number").columns.tolist()
-    categorical_columns = X_train.select_dtypes(exclude="number").columns.tolist()
-
-    if not numeric_columns and not categorical_columns:
-        raise ValueError("모델 학습에 사용할 특성 열이 없습니다.")
-
-    transformers = []
-    if numeric_columns:
-        numeric_pipeline = Pipeline(
-            steps=[
-                ("imputer", SimpleImputer(strategy="median")),
-                ("scaler", StandardScaler()),
-            ]
-        )
-        transformers.append(("numeric", numeric_pipeline, numeric_columns))
-
-    if categorical_columns:
-        categorical_pipeline = Pipeline(
-            steps=[
-                ("imputer", SimpleImputer(strategy="most_frequent")),
-                ("onehot", OneHotEncoder(handle_unknown="ignore")),
-            ]
-        )
-        transformers.append(("categorical", categorical_pipeline, categorical_columns))
-
-    preprocessor = ColumnTransformer(transformers=transformers)
-    model = LogisticRegression(max_iter=1_000, random_state=42)
-
-    return Pipeline(
-        steps=[
-            ("preprocessor", preprocessor),
-            ("model", model),
-        ]
+    model = LogisticRegression(
+        max_iter=1000,
+        random_state=42,
     )
+
+    return Pipeline([
+        ("preprocessor", preprocessor),
+        ("model", model),
+    ])
 
 
 def evaluate_model(model: Pipeline, X_test: pd.DataFrame, y_test: pd.Series) -> dict:
