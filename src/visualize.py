@@ -6,6 +6,7 @@ data/processed/adult_clean.parquet (또는 src.data_loader 결과)을 입력으�
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import seaborn as sns
 
@@ -52,9 +53,29 @@ def plot_correlation_heatmap(df: pd.DataFrame, save: bool = True) -> plt.Axes:
     from src.data_loader import NUMERIC_COLUMNS
 
     corr = df[NUMERIC_COLUMNS].corr()
+    n = len(corr)
+    mask_upper = np.triu(np.ones_like(corr, dtype=bool), k=1)
 
     fig, ax = plt.subplots(figsize=(8, 6))
-    sns.heatmap(corr, annot=True, fmt=".2f", cmap="coolwarm", center=0, vmin=-1, vmax=1, ax=ax)
+    sns.heatmap(
+        corr, mask=mask_upper, annot=True, fmt=".2f",
+        cmap="coolwarm", center=0, vmin=-1, vmax=1,
+        square=True, linewidths=0.5, linecolor="white", ax=ax,
+    )
+
+    # 위쪽 삼각형은 대칭이므로 숫자 대신 상관계수 크기에 비례한 원으로 표시
+    cmap = plt.get_cmap("coolwarm")
+    norm = plt.Normalize(vmin=-1, vmax=1)
+    for i in range(n):
+        for j in range(i + 1, n):
+            value = corr.iloc[i, j]
+            ax.scatter(
+                j + 0.5, i + 0.5,
+                s=abs(value) * 1800,
+                color=cmap(norm(value)),
+                edgecolor="white", linewidth=0.5,
+            )
+
     ax.set_title("수치형 변수 간 상관관계 (Correlation Heatmap)")
 
     if save:
