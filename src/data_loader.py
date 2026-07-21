@@ -66,15 +66,23 @@ def load_polars(path: Path = RAW_PATH) -> pl.DataFrame:
 
 
 def clean_pandas(df: pd.DataFrame) -> pd.DataFrame:
-    """문자열 컬럼 공백 제거 + 완전 중복행 제거."""
+    """문자열 컬럼 공백 제거 + 완전 중복행 제거 + 결측치 포함 행 제거."""
     obj_cols = df.select_dtypes(["object", "str"]).columns
     df = df.copy()
     df[obj_cols] = df[obj_cols].apply(lambda s: s.str.strip())
+
     before = len(df)
     df = df.drop_duplicates().reset_index(drop=True)
     removed = before - len(df)
     if removed:
         print(f"[clean_pandas] 중복행 {removed}건 제거")
+
+    before = len(df)
+    df = df.dropna().reset_index(drop=True)
+    removed = before - len(df)
+    if removed:
+        print(f"[clean_pandas] 결측치 포함 행 {removed}건 제거")
+
     return df
 
 
